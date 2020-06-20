@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>节流和防抖</title>
+</head>
+<body>
+<script>
+// https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/5
+
+// 防抖
+const debounce = (fn,time,immediately) => {
+  let timer = null
+  let result = function() {
+
+    if(timer) clearTimeout(timer)
+    if(immediately&&!timer){
+      fn.apply(this,arguments)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this,arguments)
+    },time)
+  }
+  result.cancel = () => {
+    clearTimeout(timer)
+    timer = null
+  }
+  return result
+}
+const resizeEvent = debounce(e => {
+  console.log(e)
+  resizeEvent.cancel()
+},1000,true)
+
+window.onresize = resizeEvent
+
+
+// 节流
+
+// 定时器版
+const throttle1 = (fn,time) => {
+  let timer
+  return function () {
+    if(!timer){
+      timer = setTimeout(() => {
+        timer = null
+        fn.apply(this,arguments)
+      },time)
+    }
+  }
+}
+
+// 时间戳版
+const throttle2 = (fn,time) => {
+  let pre = 0
+  return function () {
+    let now = +new Date()
+    if(now - pre > time){
+      fn.apply(this,arguments)
+      pre = now
+    }
+  }
+}
+// 综合版
+//// https://github.com/mqyqingfeng/Blog/issues/26
+document.onmousemove = throttle2((e) => {
+  console.log('e:',e)
+},1500)
+</script>
+</body>
+</html>

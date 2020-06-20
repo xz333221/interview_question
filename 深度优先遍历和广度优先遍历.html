@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>深度优先遍历和广度优先遍历</title>
+</head>
+<body>
+<div id="box">
+  <div class="parent-1">
+    <div class="child-1-1">
+      <div class="grand-child-1-1-1"></div>
+      <div class="grand-child-1-1-2"></div>
+      <div class="grand-child-1-1-3"></div>
+    </div>
+    <div class="child-1-2"></div>
+    <div class="child-1-3"></div>
+  </div>
+  <div class="parent-2">
+    <div class="child-2-1"></div>
+    <div class="child-2-2"></div>
+    <div class="child-2-3"></div>
+  </div>
+  <div class="parent-3">
+    <div class="child-3-1"></div>
+    <div class="child-3-2"></div>
+    <div class="child-3-3"></div>
+  </div>
+</div>
+<script>
+let node = document.getElementById('box')
+
+let node_list = []
+
+// 深度优先遍历
+
+// 递归
+let deepTraversal1 = (node, node_list = []) => {
+  node_list.push(node)
+  if(node.children){
+    for (let i = 0; i < node.children.length; i++) {
+      deepTraversal1(node.children[i],node_list)
+    }
+  }
+}
+// deepTraversal1(node,node_list)
+// console.log('node_list:',node_list)
+/*0: div#box
+  1: div.parent-1
+  2: div.child-1-1
+  3: div.grand-child-1-1-1
+  4: div.grand-child-1-1-2
+  5: div.grand-child-1-1-3
+  6: div.child-1-2
+  7: div.child-1-3
+  8: div.parent-2
+  9: div.child-2-1
+  10: div.child-2-2
+  11: div.child-2-3
+  12: div.parent-3
+  13: div.child-3-1
+  14: div.child-3-2
+  15: div.child-3-3*/
+
+// 非递归
+let deepTraversal2 = (node,node_list) => {
+  let stack = []
+  stack.push(node)
+  while (stack.length) {
+    let node_now = stack.pop()
+    node_list.push(node_now)
+    if(node_now.children){
+      for (let i = 0; i < node_now.children.length; i++) {
+        stack.push(node_now.children[i])
+      }
+    }
+  }
+}
+// deepTraversal2(node,node_list)
+// console.log('node_list:',node_list)
+
+// 广度优先遍历
+let widthTraversal2 = (node,node_list) => {
+  let stack = []
+  stack.push(node)
+  while (stack.length) {
+    let node_now = stack.shift()
+    node_list.push(node_now)
+    if(node_now.children){
+      for (let i = 0; i < node_now.children.length; i++) {
+        stack.push(node_now.children[i])
+      }
+    }
+  }
+}
+widthTraversal2(node,node_list)
+console.log('node_list:',node_list)
+</script>
+</body>
+</html>
